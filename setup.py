@@ -10,7 +10,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name='NSI',
     version='1.0',
-    description='Identifying Network State from LFP in Neocortex',
+    description='Classifying Network State from LFP in Neocortex',
     long_description=long_description,
     long_description_content_type="text/markdown",
     url='https://github.com/yzerlaut/Network_State_Index',
@@ -22,16 +22,16 @@ setup(
         'License :: OSI Approved :: Apache Software License',
         'Programming Language :: Python :: 3'
     ],
-    keywords='vision physiology',
+    keywords='LFP, cortex, network state',
     packages=find_packages(),
     install_requires=[
-        "pynwb",
-        "pyabf",
-        "scipy",
         "numpy",
-        "argparse",
-        "pyqt5",
-        "pyqtgraph",
-        "neo"
+        # "pynwb",
+        # "pyabf",
+        # "argparse",
+        # "pyqt5",
+        # "pyqtgraph",
+        # "neo",
+        "scipy"
     ]
 )
