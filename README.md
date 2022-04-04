@@ -36,7 +36,7 @@ pip install git+https://github.com/yzerlaut/Network_State_Index
 import numpy as np
 import nsi # the NSI module
 
-# -- let's build a fake LFP signal array (having the code features of an awake LFP signal)
+# -- let's build a fake LFP signal array (having the required features of an awake LFP signal)
 tstop, dt, sbsmpl_dt = 5, 1e-3, 5e-3 # 10s @ 1kHz
 t = np.arange(int(tstop/dt))*dt
 oscill_part = ((1-np.cos(2*np.pi*3*t))*np.random.randn(len(t))+4*(np.cos(2*np.pi*3*t)-1))*\
