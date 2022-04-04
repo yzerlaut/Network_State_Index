@@ -8,7 +8,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
     long_description = f.read()
 
 setup(
-    name='NSI',
+    name='nsi',
     version='1.0',
     description='Classifying Network State from LFP in Neocortex',
     long_description=long_description,
