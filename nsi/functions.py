@@ -74,7 +74,7 @@ def heaviside(x):
 
 
 def compute_pLFP(LFP, sampling_freq,
-                 freqs = np.linspace(50, 300, 5),
+                 freqs = np.linspace(72.8/1.83, 72.8*1.83, 20),
                  new_dt = 5e-3, # desired subsampling freq.
                  smoothing=42e-3):
     """
@@ -112,7 +112,7 @@ def compute_NSI(signal, sampling_freq,
                 p0=0,
                 low_freqs = np.linspace(2,5,5),
                 T_sliding_mean=500e-3,
-                alpha=2.85):
+                alpha=2.87):
     
     sliding_mean = compute_sliding_mean(signal, sampling_freq, T=T_sliding_mean)
     

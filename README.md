@@ -10,9 +10,7 @@ This module provides a quantitative characterization of network states in neocor
 
 ## Installation
 
-1. Install a python distribution for scientific analysis:
-
-   get the [latest Miniconda distribution](https://docs.conda.io/en/latest/miniconda.html) and install it on your home folder.
+1. Install a python distribution for scientific analysis, e.g. get the [latest Miniconda distribution](https://docs.conda.io/en/latest/miniconda.html) and install it.
    
 2. Run the following in the [Anaconda prompt](https://docs.anaconda.com/anaconda/user-guide/getting-started/#write-a-python-program-using-anaconda-prompt-or-terminal):
 
@@ -22,7 +20,7 @@ cd Network_State_Index
 pip install .
 ```
 
-If you do not wish to clone the repository you can also directly:
+If you do not wish to clone the repository you can also directly install the module with:
 ```
 pip install git+https://github.com/yzerlaut/Network_State_Index
 ```
@@ -88,7 +86,7 @@ Execute the above example by running: `python nsi/functions/py`
 
 ### Demo on the "Visual Coding - Neuropixels" dataset
 
-see associated notebook
+see the [associated notebook](https://github.com/yzerlaut/Network_State_Index/blob/main/demo/Allen-Neuropixels-dataset.ipynb).
 
 ### Demo on the paper's dataset
 
@@ -101,4 +99,4 @@ Use the dedicated [Issues](https://github.com/yzerlaut/Network_State_index/issue
 
 ## Notes
 
-My implementation of the continuous wavelet transform (`NSI.my_cwt`) is not very efficient... Any suggestions/ideas to improve this is very welcome :)
+My implementation of the continuous wavelet transform (`nsi.my_cwt`) is not very efficient... Any suggestions/ideas to improve this is very welcome :)
