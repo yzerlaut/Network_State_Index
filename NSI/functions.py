@@ -169,7 +169,7 @@ if __name__=='__main__':
     t_pLFP, pLFP = NSI.compute_pLFP(LFP, 1./dt,
                                     freqs = np.linspace(50,300,10),
                                     new_dt=5e-3,
-                                    smoothing=42e-3)__
+                                    smoothing=42e-3)
     # -- then compute the NSI from the pLFP
     # NSI = NSI.compute_NSI(pLFP,
     #                       freqs = np.linspace(50, 300, 10))
