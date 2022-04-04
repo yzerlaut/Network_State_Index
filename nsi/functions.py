@@ -112,15 +112,22 @@ def compute_NSI(signal, sampling_freq,
                 p0=0,
                 low_freqs = np.linspace(2,5,5),
                 T_sliding_mean=500e-3,
-                alpha=2.87):
+                alpha=2.87,
+                with_subquantities=False):
     
     sliding_mean = compute_sliding_mean(signal, sampling_freq, T=T_sliding_mean)
     
     low_freqs_envelope = compute_freq_envelope(signal, sampling_freq, low_freqs)
-    
-    return NSI_func(low_freqs_envelope, sliding_mean,
-                    p0=p0,
-                    alpha=alpha)
+
+    if with_subquantities:
+        return low_freqs_envelope, sliding_mean, NSI_func(low_freqs_envelope, sliding_mean,
+                                                          p0=p0,
+                                                          alpha=alpha)
+    else:
+        return NSI_func(low_freqs_envelope, sliding_mean,
+                        p0=p0,
+                        alpha=alpha)
+        
     
     
 def validate_NSI(t_NSI, NSI,
