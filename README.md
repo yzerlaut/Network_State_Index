@@ -81,7 +81,7 @@ plt.show()
 ```
 
 <p align="center">
-  <img src="demo/sythetic-example.png"/>
+  <img src="./demo/synthetic-example.png"/>
 </p>
 
 Execute the above example by running: `python nsi/functions/py`
