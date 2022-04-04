@@ -163,13 +163,14 @@ if __name__=='__main__':
     oscill_part = ((1-np.cos(2*np.pi*3*t))*np.random.randn(len(t))+4*(np.cos(2*np.pi*3*t)-1))*\
         (1-np.sign(t-2))/2.*(2-t)/(tstop-2)
     desynch_part = (1-np.sign(2-t))/2*(t-2)/(tstop-2)*2*np.random.randn(len(t))
-    LFP = oscill_part+desynch_part
+    LFP = (oscill_part+desynch_part) # a ~ 1mV ammplitude signal
 
     # -- compute the pLFP first
-    t_pLFP, pLFP = NSI.compute_pLFP(LFP, 1./dt,
+    t_pLFP, pLFP = NSI.compute_pLFP(1e3*LFP, 1./dt,
                                     freqs = np.linspace(50,300,10),
                                     new_dt=5e-3,
                                     smoothing=42e-3)
+
     # -- then compute the NSI from the pLFP
     # NSI = NSI.compute_NSI(pLFP,
     #                       freqs = np.linspace(50, 300, 10))
