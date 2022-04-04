@@ -33,23 +33,58 @@ pip install git+https://github.com/yzerlaut/Network_State_Index
 ### Minimal demo
 
 ```
-import NSI
+import numpy as np
+import nsi # the NSI module
 
-# -- let's build a fake LFP signal array
-tstop, dt = 10, 1e-4 # 10s @ 10kHz
+# -- let's build a fake LFP signal array (having the code features of an awake LFP signal)
+tstop, dt, sbsmpl_dt = 5, 1e-3, 5e-3 # 10s @ 1kHz
 t = np.arange(int(tstop/dt))*dt
-LFP = (1-np.sin(3*t) np.random.randn(len(t))
+oscill_part = ((1-np.cos(2*np.pi*3*t))*np.random.randn(len(t))+4*(np.cos(2*np.pi*3*t)-1))*\
+    (1-np.sign(t-2))/2.*(2-t)/(tstop-2)
+desynch_part = (1-np.sign(2-t))/2*(t-2)/(tstop-2)*2*np.random.randn(len(t))
+LFP = (oscill_part+desynch_part)*.1 # a ~ 1mV ammplitude signal
 
 # -- compute the pLFP first
-t_pLFP, pLFP = NSI.compute_pLFP(LFP,
-			        freqs = np.linspace(50,300,10),
-				new_dt=1e-3,
-				smoothing=42e-3)
-# -- then compute the NSI from the pLFP
-NSI = NSI.compute_NSI(pLFP,
-		      freqs = np.linspace(50, 300, ))
+t_pLFP, pLFP = nsi.compute_pLFP(1e3*LFP, 1./dt,
+                                freqs = np.linspace(50,300,10),
+                                new_dt=sbsmpl_dt,
+                                smoothing=42e-3)
+p0 = np.percentile(pLFP, 0./100) # first 100th percentile
 
+# -- then compute the NSI from the pLFP
+NSI = nsi.compute_NSI(pLFP, 1./sbsmpl_dt,
+                      low_freqs = np.linspace(2, 5, 4),
+                      p0=p0,
+                      alpha=2.85)
+
+# then validate NSI episodes
+tvNSI, vNSI = nsi.validate_NSI(t_pLFP, NSI,
+                               var_tolerance_threshold=20*p0) # here no noise so we increase the thresh
+
+
+# let's plot the result
+import matplotlib.pylab as plt
+fig, ax = plt.subplots(3, 1, figsize=(12,4))
+ax[0].plot(t, LFP, color=plt.cm.tab10(7))
+ax[1].plot(t_pLFP, pLFP, color=plt.cm.tab10(5))
+ax[2].plot(t_pLFP, NSI, label='raw')
+ax[2].plot(tvNSI, vNSI, 'o', label='validated', lw=0)
+ax[2].legend(frameon=False)
+
+for x, label in zip(ax, ['LFP (mV)', 'pLFP (uV)', 'NSI (uV)']):
+    x.set_ylabel(label)
+    if 'NSI'in label:
+        x.set_xlabel('time (s)')
+    else:
+        x.set_xticklabels([])
+plt.show()
 ```
+
+<p align="center">
+  <img src="demo/sythetic-example.png"/>
+</p>
+
+Execute the above example by running: `python nsi/functions/py`
 
 ### Demo on the "Visual Coding - Neuropixels" dataset
 
