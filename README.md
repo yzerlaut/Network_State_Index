@@ -67,8 +67,8 @@ import matplotlib.pylab as plt
 fig, ax = plt.subplots(3, 1, figsize=(12,4))
 ax[0].plot(t, LFP, color=plt.cm.tab10(7))
 ax[1].plot(t_pLFP, pLFP, color=plt.cm.tab10(5))
-ax[2].plot(t_pLFP, NSI, label='raw')
-ax[2].plot(tvNSI, vNSI, 'o', label='validated', lw=0)
+ax[2].plot(t_pLFP, NSI, color=plt.cm.tab10(4), label='raw')
+ax[2].plot(tvNSI, vNSI, 'o', label='validated', lw=0, color=plt.cm.tab10(5))
 ax[2].legend(frameon=False)
 
 for x, label in zip(ax, ['LFP (mV)', 'pLFP (uV)', 'NSI (uV)']):
