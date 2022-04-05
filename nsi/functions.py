@@ -74,23 +74,36 @@ def heaviside(x):
 
 
 def compute_pLFP(LFP, sampling_freq,
-                 freqs = np.linspace(72.8/1.83, 72.8*1.83, 20),
-                 new_dt = 5e-3, # desired subsampling freq.
+                 freqs = np.linspace(72.8/1.83, 72.8*1.83, 40),
+                 new_dt = None, # desired time subsampling 
+                 subsample_before=True, # 
                  smoothing=42e-3):
     """
     performs continuous wavelet transform and smooth the time-varying high-gamma freq power
     """
 
-    W = compute_freq_envelope(LFP, sampling_freq, freqs)
-    
-    isubsmpl = int(new_dt*sampling_freq)
-    
-    # then smoothing and subsampling
-    pLFP = gaussian_filter1d(np.reshape(W[:int(len(W)/isubsmpl)*isubsmpl],
-                                         (int(len(W)/isubsmpl),isubsmpl)).mean(axis=1),
-                              int(smoothing/new_dt)).flatten()
+    # compute the step corresponding to the desired subsampling freq
+    if new_dt is not None:
+        isubsmpl = int(new_dt*sampling_freq)
+    else:
+        isubsmpl=1
 
-    return np.arange(len(pLFP))*new_dt, pLFP
+    if subsample_before:
+        # computing the time-varying envelope
+        W = compute_freq_envelope(LFP[::isubsmpl], sampling_freq/isubsmpl, freqs)
+        # then smoothing
+        pLFP = gaussian_filter1d(W, smoothing*sampling_freq/isubsmpl)
+
+    else:
+        # computing the time-varying envelope
+        W = compute_freq_envelope(LFP, sampling_freq, freqs)
+        # resampling and smoothing
+        pLFP = gaussian_filter1d(np.reshape(W[:int(len(W)/isubsmpl)*isubsmpl],
+                                            (int(len(W)/isubsmpl),isubsmpl)).mean(axis=1),
+                                 int(smoothing/new_dt)).flatten()
+        
+    # insuring a time sampling matching those of the original data:
+    return 1./sampling_freq*np.arange(len(LFP))[::isubsmpl][:len(pLFP)], pLFP
     
 def NSI_func(low_freqs_envelope, sliding_mean,
              p0=0.,
@@ -153,7 +166,7 @@ if __name__=='__main__':
     import nsi # the NSI module
     
     # -- let's build a fake LFP signal array (having the code features of an awake LFP signal)
-    tstop, dt, sbsmpl_dt = 5, 1e-3, 5e-3 # 10s @ 1kHz
+    tstop, dt, sbsmpl_dt = 5, 1.2345e-4, 5e-3 # 10s @ 1kHz
     t = np.arange(int(tstop/dt))*dt
     oscill_part = ((1-np.cos(2*np.pi*3*t))*np.random.randn(len(t))+4*(np.cos(2*np.pi*3*t)-1))*\
         (1-np.sign(t-2))/2.*(2-t)/(tstop-2)
@@ -195,4 +208,3 @@ if __name__=='__main__':
             x.set_xticklabels([])
     # fig.savefig('demo/synthetic-example.png')
     plt.show()
-    
