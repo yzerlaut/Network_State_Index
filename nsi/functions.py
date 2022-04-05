@@ -156,7 +156,7 @@ def validate_NSI(t_NSI, NSI,
         if np.sum(np.abs(NSI[i-iTstate:i+iTstate]-NSI[i])>var_tolerance_threshold)==0:
             NSI_validated[i]=True # swith to true
 
-    return t_NSI[NSI_validated], NSI[NSI_validated]
+    return NSI_validated
 
 
     
@@ -187,8 +187,8 @@ if __name__=='__main__':
                           alpha=2.85)
 
     # then validate NSI episodes
-    tvNSI, vNSI = nsi.validate_NSI(t_pLFP, NSI,
-                                   var_tolerance_threshold=20*p0) # here no noise so we increase the thresh
+    vNSI = nsi.validate_NSI(t_pLFP, NSI,
+                            var_tolerance_threshold=20*p0) # here no noise so we increase the thresh
 
     
     # let's plot the result
@@ -197,7 +197,7 @@ if __name__=='__main__':
     ax[0].plot(t, LFP, color=plt.cm.tab10(7))
     ax[1].plot(t_pLFP, pLFP, color=plt.cm.tab10(5))
     ax[2].plot(t_pLFP, NSI, color=plt.cm.tab10(4), label='raw')
-    ax[2].plot(tvNSI, vNSI, 'o', label='validated', lw=0, color=plt.cm.tab10(5))
+    ax[2].plot(t_pLFP[vNSI], NSI[vNSI], 'o', label='validated', lw=0, color=plt.cm.tab10(5))
     ax[2].legend(frameon=False)
     
     for x, label in zip(ax, ['LFP (mV)', 'pLFP (uV)', 'NSI (uV)']):
