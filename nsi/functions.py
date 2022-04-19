@@ -74,10 +74,10 @@ def heaviside(x):
 
 
 def compute_pLFP(LFP, sampling_freq,
-                 freqs = np.linspace(72.8/1.83, 72.8*1.83, 40),
+                 freqs = np.linspace(40, 140, 20),
                  new_dt = None, # desired time subsampling 
                  subsample_before=True, # 
-                 smoothing=42e-3):
+                 smoothing=40e-3):
     """
     performs continuous wavelet transform and smooth the time-varying high-gamma freq power
     """
