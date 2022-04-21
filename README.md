@@ -5,7 +5,7 @@
 This module provides a quantitative characterization of network states in neocortex from extracellular signals. It implements the analysis described in the following article (please cite if you use this code !):
 > Network States Classification based on Local Field Potential Recordings in the Awake Mouse Neocortex
 > Yann Zerlaut, Stefano Zucca, Tommaso Fellin, Stefano Panzeri
-> bioRxiv 2022.02.08.479568; doi: https://doi.org/10.1101/2022.02.08.479568
+> bioRxiv 2022.02.08.479568; doi: [10.1101/2022.02.08.479568](https://doi.org/10.1101/2022.02.08.479568)
 
 
 ## Installation
@@ -26,13 +26,17 @@ pip install git+https://github.com/yzerlaut/Network_State_Index
 ```
 
 
+## Code
+
+The :
+ 
 ## Usage
 
 ### Minimal demo
 
 ```
 import numpy as np
-import nsi # the NSI module
+import nsi # --- the NSI module ---
 
 # -- let's build a fake LFP signal array (having the required features of an awake LFP signal)
 tstop, dt, sbsmpl_dt = 5, 1e-3, 5e-3 # 10s @ 1kHz
@@ -85,11 +89,12 @@ Execute the above example by running: `python nsi/functions/py`
 
 ### Demo on the "Visual Coding - Neuropixels" dataset
 
-see the [associated notebook](https://github.com/yzerlaut/Network_State_Index/blob/main/demo/Allen-Neuropixels-dataset.ipynb).
+As a demo for how to build an analysis pipeline based on the NSI, you can find our analysis of the Allen dataset in the [associated notebook](https://github.com/yzerlaut/Network_State_Index/blob/main/demo/Allen-Neuropixels-dataset.ipynb) (generating the figure below).
 
-### Demo on the paper's dataset
+<p align="center">
+  <img src="./demo/Allen-results.png"/>
+</p>
 
-see associated notebook
 
 ## Troubleshooting / Issues
 
@@ -98,4 +103,4 @@ Use the dedicated [Issues](https://github.com/yzerlaut/Network_State_index/issue
 
 ## Notes
 
-My implementation of the continuous wavelet transform (`nsi.my_cwt`) is not very efficient... Any suggestions/ideas to improve this is very welcome :)
+My implementation of the continuous wavelet transform (`nsi.my_cwt`) is not particularly efficient... Any suggestions/ideas to improve this is very welcome :)
