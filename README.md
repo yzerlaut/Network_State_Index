@@ -26,9 +26,9 @@ pip install git+https://github.com/yzerlaut/Network_State_Index
 ```
 
 
-## Code
+## Code description
 
-The :
+The core of the implementation lies in the file: [nsi/functions.py](./nsi/functions.py). It makes use of the continuous wavelet trasnform to evaluate the time-varying high-gamma and delta envelopes. It implements the NSI formula and validation procedure.
  
 ## Usage
 
