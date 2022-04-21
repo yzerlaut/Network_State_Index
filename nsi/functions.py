@@ -62,7 +62,8 @@ def compute_freq_envelope(signal, sampling_freq, freqs):
     """
     return np.max(np.abs(my_cwt(signal,
                                 freqs,
-                                1./sampling_freq)), axis=0) # max of envelope of wavelet freq.
+                                1./sampling_freq)), axis=0)
+
 
 ##################################################
 ########### Processing of the LFP ################
@@ -105,14 +106,16 @@ def compute_pLFP(LFP, sampling_freq,
     # insuring a time sampling matching those of the original data:
     return 1./sampling_freq*np.arange(len(LFP))[::isubsmpl][:len(pLFP)], pLFP
     
+
 def NSI_func(low_freqs_envelope, sliding_mean,
              p0=0.,
              alpha=2.):
     """
-    p0 should be the 100th percentile of the signal. It can be a sliding mean.
+    p0 should be the 100th percentile of the signal. It can be a sliding percentile.
     """
     X = (p0+alpha*low_freqs_envelope)-sliding_mean # rhythmicity criterion
     return -2*low_freqs_envelope*heaviside(X)+heaviside(-X)*(sliding_mean-p0)
+
 
 
 def compute_sliding_mean(signal, sampling_freq,
@@ -127,7 +130,10 @@ def compute_NSI(signal, sampling_freq,
                 T_sliding_mean=500e-3,
                 alpha=2.87,
                 with_subquantities=False):
-    
+    """
+    1. compute sliding-mean and low-freq envelope
+    2. apply NSI formula
+    """    
     sliding_mean = compute_sliding_mean(signal, sampling_freq, T=T_sliding_mean)
     
     low_freqs_envelope = compute_freq_envelope(signal, sampling_freq, low_freqs)
@@ -146,7 +152,9 @@ def compute_NSI(signal, sampling_freq,
 def validate_NSI(t_NSI, NSI,
                  Tstate=200e-3,
                  var_tolerance_threshold=2):
-    
+    """
+    iterates over episodes to perform state validation
+    """
     # validate states:
     iTstate = int(Tstate/(t_NSI[1]-t_NSI[0]))
     NSI_validated = np.zeros(len(NSI), dtype=bool) # false by default
@@ -161,6 +169,8 @@ def validate_NSI(t_NSI, NSI,
 
     
 if __name__=='__main__':
+
+    # ---  minimal working example (see README) --- #
 
     import numpy as np
     import nsi # the NSI module
@@ -178,7 +188,7 @@ if __name__=='__main__':
                                     freqs = np.linspace(50,300,10),
                                     new_dt=sbsmpl_dt,
                                     smoothing=42e-3)
-    p0 = np.percentile(pLFP, 0./100) # first 100th percentile
+    p0 = np.percentile(pLFP, 1) # first 100th percentile
 
     # -- then compute the NSI from the pLFP
     NSI = nsi.compute_NSI(pLFP, 1./sbsmpl_dt,
@@ -206,5 +216,5 @@ if __name__=='__main__':
             x.set_xlabel('time (s)')
         else:
             x.set_xticklabels([])
-    # fig.savefig('demo/synthetic-example.png')
+    # fig.savefig('doc/synthetic-example.png')
     plt.show()

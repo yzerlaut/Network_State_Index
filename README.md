@@ -51,7 +51,7 @@ t_pLFP, pLFP = nsi.compute_pLFP(1e3*LFP, 1./dt,
                                 freqs = np.linspace(50,300,10),
                                 new_dt=sbsmpl_dt,
                                 smoothing=42e-3)
-p0 = np.percentile(pLFP, 0./100) # first 100th percentile
+p0 = np.percentile(pLFP, 1) # first 100th percentile
 
 # -- then compute the NSI from the pLFP
 NSI = nsi.compute_NSI(pLFP, 1./sbsmpl_dt,
