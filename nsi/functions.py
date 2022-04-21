@@ -37,7 +37,7 @@ def Morlet_Wavelet_Decay(f, w0=6.):
 def from_fourier_to_morlet(freq):
     x = np.linspace(0.1/freq, 2.*freq, 1e3)
     return x[np.argmin((x-freq*(1-np.exp(-freq*x)))**2)]
-
+    
 def get_Morlet_of_right_size(f, dt, w0=6., with_t=False):
     Tmax = Morlet_Wavelet_Decay(f, w0=w0)
     t = np.arange(-int(Tmax/dt), int(Tmax/dt)+1)*dt
@@ -74,10 +74,10 @@ def heaviside(x):
 
 
 def compute_pLFP(LFP, sampling_freq,
-                 freqs = np.linspace(72.8/1.83, 72.8*1.83, 40),
-                 new_dt = None, # desired time subsampling
-                 subsample_before=True, #
-                 smoothing=42e-3):
+                 freqs = np.linspace(40, 140, 20),
+                 new_dt = None, # desired time subsampling 
+                 subsample_before=True, # 
+                 smoothing=40e-3):
     """
     performs continuous wavelet transform and smooth the time-varying high-gamma freq power
     """
@@ -101,10 +101,10 @@ def compute_pLFP(LFP, sampling_freq,
         pLFP = gaussian_filter1d(np.reshape(W[:int(len(W)/isubsmpl)*isubsmpl],
                                             (int(len(W)/isubsmpl),isubsmpl)).mean(axis=1),
                                  int(smoothing/new_dt)).flatten()
-
+        
     # insuring a time sampling matching those of the original data:
     return 1./sampling_freq*np.arange(len(LFP))[::isubsmpl][:len(pLFP)], pLFP
-
+    
 def NSI_func(low_freqs_envelope, sliding_mean,
              p0=0.,
              alpha=2.):
@@ -119,7 +119,7 @@ def compute_sliding_mean(signal, sampling_freq,
                          T=500e-3):
     """ just a gaussian smoothing """
     return gaussian_filter1d(signal, int(T*sampling_freq))
-
+    
 
 def compute_NSI(signal, sampling_freq,
                 p0=0,
@@ -127,9 +127,9 @@ def compute_NSI(signal, sampling_freq,
                 T_sliding_mean=500e-3,
                 alpha=2.87,
                 with_subquantities=False):
-
+    
     sliding_mean = compute_sliding_mean(signal, sampling_freq, T=T_sliding_mean)
-
+    
     low_freqs_envelope = compute_freq_envelope(signal, sampling_freq, low_freqs)
 
     if with_subquantities:
@@ -140,13 +140,13 @@ def compute_NSI(signal, sampling_freq,
         return NSI_func(low_freqs_envelope, sliding_mean,
                         p0=p0,
                         alpha=alpha)
-
-
-
+        
+    
+    
 def validate_NSI(t_NSI, NSI,
                  Tstate=200e-3,
                  var_tolerance_threshold=2):
-
+    
     # validate states:
     iTstate = int(Tstate/(t_NSI[1]-t_NSI[0]))
     NSI_validated = np.zeros(len(NSI), dtype=bool) # false by default
@@ -159,12 +159,12 @@ def validate_NSI(t_NSI, NSI,
     return NSI_validated
 
 
-
+    
 if __name__=='__main__':
 
     import numpy as np
     import nsi # the NSI module
-
+    
     # -- let's build a fake LFP signal array (having the code features of an awake LFP signal)
     tstop, dt, sbsmpl_dt = 5, 1.2345e-4, 5e-3 # 10s @ 1kHz
     t = np.arange(int(tstop/dt))*dt
@@ -190,7 +190,7 @@ if __name__=='__main__':
     vNSI = nsi.validate_NSI(t_pLFP, NSI,
                             var_tolerance_threshold=20*p0) # here no noise so we increase the thresh
 
-
+    
     # let's plot the result
     import matplotlib.pylab as plt
     fig, ax = plt.subplots(3, 1, figsize=(8,4))
@@ -199,7 +199,7 @@ if __name__=='__main__':
     ax[2].plot(t_pLFP, NSI, color=plt.cm.tab10(4), label='raw')
     ax[2].plot(t_pLFP[vNSI], NSI[vNSI], 'o', label='validated', lw=0, color=plt.cm.tab10(5))
     ax[2].legend(frameon=False)
-
+    
     for x, label in zip(ax, ['LFP (mV)', 'pLFP (uV)', 'NSI (uV)']):
         x.set_ylabel(label)
         if 'NSI'in label:
