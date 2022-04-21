@@ -82,7 +82,7 @@ plt.show()
 ```
 
 <p align="center">
-  <img src="./demo/synthetic-example.png"/>
+  <img src="./doc/synthetic-example.png"/>
 </p>
 
 Execute the above example by running: `python nsi/functions/py`
@@ -92,7 +92,7 @@ Execute the above example by running: `python nsi/functions/py`
 As a demo for how to build an analysis pipeline based on the NSI, you can find our analysis of the Allen dataset in the [associated notebook](https://github.com/yzerlaut/Network_State_Index/blob/main/demo/Allen-Neuropixels-dataset.ipynb) (generating the figure below).
 
 <p align="center">
-  <img src="./demo/Allen-results.png"/>
+  <img src="./doc/Allen-results.png"/>
 </p>
 
 
